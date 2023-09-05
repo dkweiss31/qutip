@@ -39,7 +39,6 @@ import qutip.piqs.piqs as piqs
 from .bloch import *
 from .visualization import *
 from .animation import *
-from .orbital import *
 from .bloch3d import *
 from .matplotlib_utilities import *
 
@@ -52,7 +51,6 @@ from .entropy import *
 from .partial_transpose import *
 from .continuous_variables import *
 from .distributions import *
-from .three_level_atom import *
 
 
 # utilities

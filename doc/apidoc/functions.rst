@@ -37,14 +37,6 @@ Random Operators and States
     :members: rand_dm, rand_herm, rand_ket, rand_stochastic, rand_unitary, rand_super, rand_super_bcsz
 
 
-Three-Level Atoms
------------------
-
-.. automodule:: qutip.three_level_atom
-    :members: three_level_basis, three_level_ops
-    :undoc-members:
-
-
 Superoperators and Liouvillians
 -------------------------------
 
@@ -241,8 +233,6 @@ Graphs and Visualization
 .. automodule:: qutip.animation
     :members: anim_hinton, anim_matrix_histogram, anim_fock_distribution, anim_wigner, anim_sphereplot, anim_schmidt, anim_qubism, anim_wigner_sphere, anim_spin_distribution
 
-.. automodule:: qutip.orbital
-    :members: orbital
 
 .. automodule:: qutip.matplotlib_utilities
    :members: wigner_cmap, complex_phase_cmap
