@@ -559,6 +559,51 @@ def fsesolve(H, psi0, tlist, e_ops=None, T=0.0, args=None, options=None):
     return result
 
 
+def floquet_master_equation_steadystate(A, safety=True):
+    """
+    Returns the steadystate density matrix (in the floquet basis!) for the
+    Floquet-Markov master equation. This function uses the fact that
+    this can be simplified to an eigenvalue problem, please see Verney et al.
+    PRApplied (2019), discussion after Eq. (B9) for details (note typo
+    in the equation for R, nu and alpha indices incorrectly transposed)
+
+    Parameters
+    ----------
+    A : matrix
+        A matrix used to build the master equation defined
+        in Eq. (252) of Grifoni 1998
+    safety : bool
+        Whether to check that the nullspace is well separated from the other
+        eigenspaces or not (defaults to True).
+    """
+    R = np.zeros_like(A)
+    N = A.shape[0]
+    for alpha in range(N):
+        for beta in range(N):
+            if alpha != beta:
+                R[alpha, beta] = A[alpha, beta]
+            else:
+                R[alpha, beta] = -1.0 * np.sum([
+                    A[nu, alpha] for nu in range(N) if nu != alpha]
+                )
+
+    # Look for kernel of R
+    eigvals, eigvecs = Qobj(R).eigenstates()
+    kernel_index = np.argmin(np.abs(eigvals))
+    if safety:
+        # Ensure that there is a clear separation in the spectrum, which means
+        # that the nullspace is well delimited and of size 1.
+        assert len(eigvals[np.isclose(eigvals, eigvals[kernel_index])]) == 1
+
+    # Qobj().eigenstates normalizes in L2 norm, we want a L1 normalization
+    ss_pops = np.real(eigvecs[kernel_index].full())
+    ss_pops = ss_pops / np.sum(ss_pops)
+    steadystate = Qobj(np.diag(ss_pops.flatten()))
+
+    return steadystate, np.sort(eigvals[np.isclose(eigvals,
+                                                   eigvals[kernel_index])])
+
+
 def fmmesolve(
     H,
     rho0,
